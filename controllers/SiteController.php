@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use Aws;
+use Aws\S3\S3Client;
 
 class SiteController extends Controller
 {
@@ -87,6 +89,86 @@ class SiteController extends Controller
         }
 
         return $theme;
+    }
+
+    public function actionAws()
+    {
+        $config = array(
+            'region' => 'ap-northeast-1',
+            'credentials' => [
+                'key' => 'AKIAIXGXRS6IHTVI23QQ',
+                'secret' => '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',
+            ],
+            'version' => 'latest',
+            // 'debug'   => true
+        );
+
+        $sdk = new Aws\Sdk($config);
+
+        $client = $sdk->createS3();
+
+        /*     $result = $client->listBuckets();
+
+             foreach ($result['Buckets'] as $bucket) {
+                 echo $bucket['Name'] . "\n";
+             }*/
+
+
+        $params = [
+            'Bucket' => 'theme.kkk',
+            'Key' => 'tea1',
+            'SourceFile' => 'C:/wamp2016_new/www/yii2/README.md',
+            // 'Body'   => fopen('C:/wamp2016_new/www/yii2/README.md', 'r'),
+            'ContentType' => 'text/plain',
+            'ACL' => 'public-read',
+            'StorageClass' => 'REDUCED_REDUNDANCY',
+        ];
+
+// Using operation methods creates command implicitly.
+        // $result = $client->putObject($params);
+        try {
+        $result = $client->putObject(array(
+            'Bucket' => 'theme.kkk',
+            'Key' => 'tea1',
+            'SourceFile' => 'C:/wamp2016_new/www/yii2/README.md',
+            'ContentType' => 'text/plain',
+      //      'ACL' => 'public-read',
+        ));
+            // Print the URL to the object.
+            echo $result['ObjectURL'] . "\n";
+        } catch (S3Exception $e) {
+            echo $e->getMessage() . "\n";
+        }
+
+      //  $object = $client->getObject( array(        'Bucket' => 'theme.kkk',
+      //      'Key'    => 'tea'));
+
+       // echo $result['ObjectURL'];
+echo $result;
+        //echo $object;
+    }
+
+    public function actionAws2(){
+        $config = array(
+            'region' => 'ap-northeast-1',
+            'credentials' => [
+            'key' => 'AKIAIXGXRS6IHTVI23QQ',
+            'secret' => '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',
+        ],
+            'version' => 'latest',
+           // 'debug'   => true
+        );
+
+        $sdk = new Aws\Sdk($config);
+
+        $client = $sdk->createS3();
+
+
+
+       $object = $client->getObject( array(        'Bucket' => 'theme.kkk',
+            'Key'    => 'tea1'));
+
+        echo $object;
     }
 
     public function actionLogin()
