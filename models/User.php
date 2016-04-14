@@ -27,12 +27,18 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
         ],
     ];
 
+    public static function find(){
+        return json_encode(self::$users);
+    }
     /**
      * @inheritdoc
      */
-    public static function findIdentity($id)
+    public static function findIdentity($id = null)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        if(is_null($id)){
+            $id = '101';
+        }
+        return isset(self::$users[$id]) ? json_encode(new static(self::$users[$id])) : null;
     }
 
     /**
@@ -99,5 +105,9 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
     public function validatePassword($password)
     {
         return $this->password === $password;
+    }
+
+    public function save($user){
+        self::$users[$user->id] = $user;
     }
 }

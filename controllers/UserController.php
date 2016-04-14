@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use yii\rest\Controller;
+use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\filters\auth\CompositeAuth;
@@ -29,14 +29,6 @@ class UserController extends Controller
         return $behaviors;
     }*/
 
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        // #定义返回格式是：JSON
-        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
-        return $behaviors;
-    }
-
     public function actions()
     {
         $actions = parent::actions();
@@ -49,28 +41,26 @@ class UserController extends Controller
     {
         $modelClass = $this->modelClass;
         $query = $modelClass::find();
-        return new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        return $query;
     }
 
-    public function actionFind()
+    public function actionFind($id)
     {
         $modelClass = $this->modelClass;
-        $query = $modelClass::find();
-        return new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        $query = $modelClass::findIdentity($id);
+
+        return $query;
     }
 
     public function actionCreate()
     {
         $model = new $this->modelClass();
-        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
-        if (!$model->save()) {
-            return array_values($model->getFirstErrors())[0];
+        echo $model->load(Yii::$app->request->post());
+/*        $model = new $this->modelClass();
+        if ($model->load(Yii::$app->request->post()) && $model->save(Yii::$app->request->post())) {
+            return findIdentity($model->$id);
         }
-        return $model;
+        return $model;*/
     }
 
     public function actionUpdate($id)
