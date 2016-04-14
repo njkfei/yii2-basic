@@ -3,13 +3,16 @@
 namespace app\controllers;
 
 use Yii;
+use yii\rest\ActiveController;
 use yii\filters\AccessControl;
-use yii\web\Controller;
+use yii\rest\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use Aws;
 use Aws\S3\S3Client;
+use app\models\UploadForm;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -51,6 +54,26 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        return $this->render('index');
+    }
+
+    public function actionUpload()
+    {
+        $model = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->upload()) {
+                // file is uploaded successfully
+                return;
+            }
+        }
+
+        return $this->render('upload', ['model' => $model]);
+    }
+
+
+    public function actionRedis(){
         Yii::$app->cache->set('test', 'hehe..');
         echo Yii::$app->cache->get('test'), "\n";
 
@@ -59,7 +82,6 @@ class SiteController extends Controller
         sleep(6);
         echo '2 ', Yii::$app->cache->get('test1'), "\n";
         return 'hello,world';
-        //return $this->render('index');
     }
 
     public function actionDb(){
