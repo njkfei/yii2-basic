@@ -11,6 +11,14 @@
 * mysql:在windows环境下是wamp，linx下面集成 wamp就好了
 * 强烈建议使用phpmyadmin
 
+## 搭建步骤
+```
+git clone [https://github.com/njkfei/yii2-basic](https://github.com/njkfei/yii2-basic)
+```
+```
+composer update
+```
+
 ## 测试
 ### 启动服务
 ```
