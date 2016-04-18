@@ -12,9 +12,12 @@
 * 强烈建议使用phpmyadmin
 
 ## 搭建步骤
+### 复制本项目
 ```
-git clone [https://github.com/njkfei/yii2-basic](https://github.com/njkfei/yii2-basic)
+git clone (https://github.com/njkfei/yii2-basic)[https://github.com/njkfei/yii2-basic
 ```
+### 更新vendor
+  vendor是本项目的依赖项目，需要下载到本地，运行下面的命令即可。注意，时间有点长，需要耐心。
 ```
 composer update
 ```
