@@ -17,7 +17,7 @@ class UserController extends Controller
         'collectionEnvelope' => 'items',
     ];
 
-/*    public function behaviors()
+    public function behaviors()
     {
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
@@ -27,7 +27,7 @@ class UserController extends Controller
             ],
         ];
         return $behaviors;
-    }*/
+    }
 
     public function actions()
     {
