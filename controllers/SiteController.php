@@ -92,7 +92,7 @@ class SiteController extends Controller
     }
 
     public function  actionThemes(){
-        $posts = Yii::$app->db->createCommand('SELECT * FROM themes')
+        $posts = Yii::$app->db->createCommand('SELECT * FROM postinfo')
             ->queryAll();
 
         echo json_encode($posts);
@@ -103,7 +103,7 @@ class SiteController extends Controller
         $theme = Yii::$app->cache->get("theme".$id);
 
         if($theme==false){
-            $theme = Yii::$app->db->createCommand('SELECT * FROM themes ')->queryOne();
+            $theme = Yii::$app->db->createCommand('SELECT * FROM postinfo ')->queryOne();
 
             echo json_encode($theme);
 
@@ -214,6 +214,7 @@ echo $result;
 
         return $this->goHome();
     }
+
 
     public function actionContact()
     {

@@ -33,19 +33,6 @@ class PostinfoController extends Controller
                     'class' => HttpBasicAuth::className(),
                     'auth' => [$this, 'auth']
                 ],*/
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'only' => ['index','create','update','view'],
-                    'rules' => [
-                        // allow authenticated users
-                        [
-                            'allow' => true,
-                            'actions' => ['index','create','update','view'],
-                            'roles' => ['@'],
-                        ],
-                        // everything else is denied
-                    ],
-                ],
             ],
         ];
     }
