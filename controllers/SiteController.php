@@ -238,21 +238,6 @@ echo $result;
         ]);
     }
 
-    public function actionViews()
-    {
-        $theme = Yii::$app->cache->get("themes");
-
-        if($theme==false){
-            $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`version_in`,`title`,`zip_source` as `downloadUrl`,`zip_name`,`theme_url` as `previewImageUrl`  FROM `postinfo` ')->queryAll();
-
-            Yii::$app->cache->set("themes",json_encode($theme));
-
-            return $theme;
-        }
-
-        return json_decode($theme);
-    }
-
     public function actionAbout()
     {
         return $this->render('about');

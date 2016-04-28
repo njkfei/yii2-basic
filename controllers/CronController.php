@@ -27,7 +27,7 @@ class CronController extends ActiveController {
 
             Yii::$app->cache->flush();
 
-            $themes = Yii::$app->db->createCommand('SELECT `id`, `pacname` as `packageName` ,`version`,`version_in`,`title`,`zip_source` as `downloadUrl`,`zip_name`,`theme_url` as `previewImageUrl`,`status` FROM `postinfo` ')->queryAll();
+            $themes = Yii::$app->db->createCommand('SELECT `id`, `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,`theme_url` as `previewImageUrl`  FROM `postinfo` where `status`=1 ')->queryAll();
             $themes_new = array();
             if($themes != null){
                 foreach($themes as $theme){
