@@ -3,9 +3,9 @@
 namespace app\controllers;
 
 use Yii;
-use yii\rest\ActiveController;
+
 use yii\filters\AccessControl;
-use yii\rest\Controller;
+use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
@@ -54,7 +54,16 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+       // return $this->render('index');
+
+        Yii::$app->cache->set('test', 'hehe..');
+        echo Yii::$app->cache->get('test'), "\n";
+
+        Yii::$app->cache->set('test1', 'haha..', 5);
+        echo '1 ', Yii::$app->cache->get('test1'), "\n";
+        //sleep(6);
+        echo '2 ', Yii::$app->cache->get('test1'), "\n";
+        return 'hello,world';
     }
 
     public function actionUpload()
@@ -79,7 +88,7 @@ class SiteController extends Controller
 
         Yii::$app->cache->set('test1', 'haha..', 5);
         echo '1 ', Yii::$app->cache->get('test1'), "\n";
-        sleep(6);
+        //sleep(6);
         echo '2 ', Yii::$app->cache->get('test1'), "\n";
         return 'hello,world';
     }
@@ -227,6 +236,21 @@ echo $result;
         return $this->render('contact', [
             'model' => $model,
         ]);
+    }
+
+    public function actionViews()
+    {
+        $theme = Yii::$app->cache->get("themes");
+
+        if($theme==false){
+            $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`version_in`,`title`,`zip_source` as `downloadUrl`,`zip_name`,`theme_url` as `previewImageUrl`  FROM `postinfo` ')->queryAll();
+
+            Yii::$app->cache->set("themes",json_encode($theme));
+
+            return $theme;
+        }
+
+        return json_decode($theme);
     }
 
     public function actionAbout()
