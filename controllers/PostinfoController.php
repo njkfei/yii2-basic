@@ -56,7 +56,7 @@ class PostinfoController extends Controller
                $theme = Yii::$app->cache->get("theme".$id);
 
                if($theme==false){
-                   $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,,`title`,`zip_source` as `downloadUrl`,,`theme_url` as `previewImageUrl` FROM postinfo where  where `status`=1 and  `id` = ' .$id)->queryOne();
+                   $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `id` = ' .$id)->queryOne();
 
                    Yii::$app->cache->set("theme".$id,json_encode($theme));
 
@@ -64,5 +64,21 @@ class PostinfoController extends Controller
                }
 
                return json_decode($theme);
+    }
+
+    public function actionItems($startid = 0,$count=9)
+    {
+
+        $theme = Yii::$app->cache->get("theme".$startid."_".$count);
+
+        if($theme==false){
+            $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `id` >= ' .$startid ." limit ".$count)->queryOne();
+
+            Yii::$app->cache->set("theme".$startid."_".$count,json_encode($theme));
+
+            return $theme;
+        }
+
+        return json_decode($theme);
     }
 }
