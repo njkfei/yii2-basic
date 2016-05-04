@@ -52,11 +52,11 @@ class PostinfoController extends Controller
      */
     public function actionItem($id = 1)
     {
-
+gi
                $theme = Yii::$app->cache->get("theme".$id);
 
                if($theme==false){
-                   $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `id` = ' .$id)->queryOne();
+                   $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `id` = ' .$id)->queryOne();
 
                    Yii::$app->cache->set("theme".$id,json_encode($theme));
 
@@ -66,19 +66,18 @@ class PostinfoController extends Controller
                return json_decode($theme);
     }
 
-    public function actionItems($startid = 0,$count=9)
+    public function actionItems($startid=0,$count=9)
     {
+        $themes = Yii::$app->cache->get("theme".$startid."s".$count);
 
-        $theme = Yii::$app->cache->get("theme".$startid."_".$count);
+        if($themes==false){
+            $themes = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `id` >= ' .$startid ." limit ".$count)->queryAll();
 
-        if($theme==false){
-            $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `id` >= ' .$startid ." limit ".$count)->queryOne();
+            Yii::$app->cache->set("theme".$startid."s".$count,json_encode($themes));
 
-            Yii::$app->cache->set("theme".$startid."_".$count,json_encode($theme));
-
-            return $theme;
+            return $themes;
         }
 
-        return json_decode($theme);
+        return json_decode($themes);
     }
 }
