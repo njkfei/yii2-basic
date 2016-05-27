@@ -28,7 +28,7 @@ class PostinfoController extends Controller
                    $theme = Yii::$app->cache->get("themes");
 
                    if($theme==false){
-                       $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,,`title`,`zip_source` as `downloadUrl`,`theme_url` as `previewImageUrl`  FROM `postinfo` where `status`=1')->queryAll();
+                       $theme = Yii::$app->db->createCommand('SELECT `order_id` as id, `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,`theme_url` as `previewImageUrl`  FROM `postinfo` where `status`=1 and `order_id`<>65535 ORDER BY `id` ASC')->queryAll();
 
                        Yii::$app->cache->set("themes",json_encode($theme));
 
@@ -52,11 +52,11 @@ class PostinfoController extends Controller
      */
     public function actionItem($id = 1)
     {
-gi
+
                $theme = Yii::$app->cache->get("theme".$id);
 
                if($theme==false){
-                   $theme = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `id` = ' .$id)->queryOne();
+                   $theme = Yii::$app->db->createCommand('SELECT `order_id` as `id`, `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `order_id` = ' .$id)->queryOne();
 
                    Yii::$app->cache->set("theme".$id,json_encode($theme));
 
@@ -71,7 +71,7 @@ gi
         $themes = Yii::$app->cache->get("theme".$startid."s".$count);
 
         if($themes==false){
-            $themes = Yii::$app->db->createCommand('SELECT `pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `id` >= ' .$startid ." limit ".$count)->queryAll();
+            $themes = Yii::$app->db->createCommand('SELECT `order_id` as `id`,`pacname` as `packageName` ,`version`,`title`,`zip_source` as `downloadUrl`,`theme_url` as `previewImageUrl` FROM postinfo where  `status`=1 and  `order_id`<>65535 and  `order_id` >= ' .$startid ."  ORDER BY `id` ASC " ." limit ".$count)->queryAll();
 
             Yii::$app->cache->set("theme".$startid."s".$count,json_encode($themes));
 
